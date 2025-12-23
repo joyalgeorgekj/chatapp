@@ -94,7 +94,7 @@ function App() {
                                 <span className="text-sm font-semibold text-heading">
                                     {name + socket.id === m.sender + m.id
                                         ? "You"
-                                        : m.sender.slice(0, 5)}
+                                        : m.sender}
                                     :
                                 </span>
                                 <span className="text-sm text-body">
