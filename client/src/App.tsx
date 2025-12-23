@@ -84,15 +84,15 @@ function App() {
     return (
         <div className="grid min-h-screen">
             <div className="flex flex-col p-2.5 gap-2 w-fit mx-auto">
-                {messages.map((m) => (
+                {messages.map((m, ind) => (
                     <>
                         <div
-                            key={m.id}
+                            key={ind}
                             className="flex flex-col gap-1 w-full max-w-[320px]"
                         >
                             <div className="flex items-center space-x-1.5 rtl:space-x-reverse">
                                 <span className="text-sm font-semibold text-heading">
-                                    {name === m.sender
+                                    {name + socket.id === m.sender + m.id
                                         ? "You"
                                         : m.sender.slice(0, 5)}
                                     :
