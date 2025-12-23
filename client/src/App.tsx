@@ -16,6 +16,8 @@ function App() {
     const [text, setText] = useState<string>("");
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
     const inputRef = useRef<null | HTMLInputElement>(null);
+    const [name, setName] = useState<string>("");
+    const [toggle, setToggle] = useState<boolean>(false);
 
     useEffect(() => {
         socket.on("connect", () => {
@@ -24,9 +26,9 @@ function App() {
 
         socket.on("chat:message", (msg) => {
             setMessages((prev) => [...prev, msg]);
-        }); 
+        });
 
-        if(inputRef.current) inputRef.current.focus();
+        if (inputRef.current) inputRef.current.focus();
 
         return () => {
             socket.off("chat:message");
@@ -44,9 +46,40 @@ function App() {
         e.preventDefault();
         if (!text.trim()) return;
 
-        socket.emit("chat:message", { text });
+        socket.emit("chat:message", { from: name, text });
         setText("");
     };
+
+    const setUserName = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        setToggle(true);
+    };
+
+    if (!toggle)
+        return (
+            <div className="grid min-h-screen">
+                <div className="flex flex-col p-2.5 gap-2 w-fit mx-auto">
+                    <form onSubmit={setUserName} className="flex h-fit gap-2">
+                        <input
+                            value={name}
+                            type="text"
+                            name="username-input"
+                            className="px-4 py-2 outline-0 rounded-md border border-neutral-700/50"
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Choose Display Name..."
+                            autoFocus
+                        />
+                        <button
+                            type="submit"
+                            className="px-4 py-2 outline-0 rounded-md border border-neutral-200/50 bg-blue-600/75 text-white cursor-pointer"
+                        >
+                            Send
+                        </button>
+                    </form>
+                </div>
+            </div>
+        );
 
     return (
         <div className="grid min-h-screen">
@@ -59,7 +92,7 @@ function App() {
                         >
                             <div className="flex items-center space-x-1.5 rtl:space-x-reverse">
                                 <span className="text-sm font-semibold text-heading">
-                                    {socket.id === m.sender
+                                    {name === m.sender
                                         ? "You"
                                         : m.sender.slice(0, 5)}
                                     :
