@@ -22,7 +22,7 @@ io.on("connection", (socket) => {
     const payload = {
       id: crypto.randomUUID(),
       text: message.text,
-      sender: socket.id,
+      sender: message.from,
       time: Date.now(),
     };
 
