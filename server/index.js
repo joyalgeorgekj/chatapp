@@ -20,7 +20,7 @@ io.on("connection", (socket) => {
   // Receive message from any client
   socket.on("chat:message", (message) => {
     const payload = {
-      id: crypto.randomUUID(),
+      id: socket.id,
       text: message.text,
       sender: message.from,
       time: Date.now(),
